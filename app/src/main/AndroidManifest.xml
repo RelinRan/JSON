@@ -4,5 +4,4 @@
 
     <application
         android:allowBackup="true"></application>
-
 </manifest>
