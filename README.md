@@ -1,8 +1,8 @@
 # JsonParser
 Android Json解析工具
-
+[JsonParser.jar](https://github.com/RelinRan/AndroidKit/blob/master/JsonParser.jar)
 ## 方法一  ARR依赖
-[AndroidKit.arr](https://github.com/RelinRan/AndroidKit/blob/master/AndrodKit.aar)
+[JsonParser.arr](https://github.com/RelinRan/AndroidKit/blob/master/JsonParser.aar)
 ```
 android {
     ....
