@@ -486,9 +486,10 @@ public class JsonParser {
             String value;
             //一般数据类型、字符类型
             if (fieldType.isPrimitive() || fieldType == String.class) {
-                sb.append("\"" + name + "\":");
                 try {
+                    sb.append("\"" + name + "\":");
                     value = String.valueOf(field.get(obj));
+                    System.out.println("->1 " + name+" = "+ value);
                     sb.append("\"" + value + "\"");
                     sb.append(",");
                 } catch (IllegalAccessException e) {
@@ -507,7 +508,11 @@ public class JsonParser {
                     sb.append("[");
                     int size = list == null ? 0 : list.size();
                     for (int i = 0; i < size; i++) {
-                        value = parseObject(list.get(i));
+                        if (list.get(i).getClass()== String.class){
+                            value = "\""+list.get(i)+"\"";
+                        }else{
+                            value = parseObject(list.get(i));
+                        }
                         sb.append(value);
                         if (i != size - 1) {
                             sb.append(",");
