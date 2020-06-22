@@ -489,7 +489,6 @@ public class JsonParser {
                 try {
                     sb.append("\"" + name + "\":");
                     value = String.valueOf(field.get(obj));
-                    System.out.println("->1 " + name+" = "+ value);
                     sb.append("\"" + value + "\"");
                     sb.append(",");
                 } catch (IllegalAccessException e) {
