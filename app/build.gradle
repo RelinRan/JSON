@@ -5,7 +5,6 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-//      applicationId "com.android.json"
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 1
@@ -22,14 +21,14 @@ android {
     }
     task makeJar(type:Copy){
         //删除存在的jar
-        delete 'build/libs/JsonParser.jar'
+        delete 'build/libs/json.jar'
         //设置拷贝的文件
-        from('build/intermediates/bundles/debug/classes.jar')
+        from('build/intermediates/arr_main_jar/classes.jar')
         //打包后的目录
         into('build/libs/')
         //把生成的jar改名
         include('classes.jar')
-        rename('classes.jar','JsonParser.jar')
+        rename('classes.jar','json.jar')
         //配置完了在 Terminal中输入gradlew makeJar
     }
 }

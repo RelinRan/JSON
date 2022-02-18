@@ -1,7 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.json">
-
-    <application
-        android:allowBackup="true"></application>
-</manifest>
+<manifest package="androidx.json"></manifest>

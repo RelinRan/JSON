@@ -1,56 +1,76 @@
-# JsonParser
-Android Json解析工具
+# JSON
+Android Json工具
 ## JAR
-[JsonParser.jar](https://github.com/RelinRan/JsonParser/blob/master/JsonParser.jar)
-## ARR依赖
-[JsonParser.arr](https://github.com/RelinRan/JsonParser/blob/master/JsonParser.aar)
+[JSON.jar](https://github.com/RelinRan/JsonParser/blob/master/JSON.jar)
+## ARR
+[JSON.arr](https://github.com/RelinRan/JsonParser/blob/master/JSON.aar)
+
+## JitPack implementation
+### /build.grade
 ```
-android {
-    ....
+allprojects {
     repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
+		...
+		maven { url 'https://jitpack.io' }
+	}
 }
-
+```
+### /app/build.grade
+```
 dependencies {
-    implementation(name: 'JsonParser', ext: 'aar')
+	 implementation 'com.github.RelinRan:JSON:2022.2.18.1'
 }
-
 ```
-
-## JitPack依赖
-### A.项目/build.grade
+## object转json
 ```
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+User user = new User();
+user.setName("JSON");
+user.setAge(25);
+String json = JSON.toJson(user);
 ```
-### B.项目/app/build.grade
+## json转object
 ```
-	dependencies {
-	        implementation 'com.github.RelinRan:JsonParser:1.0.2'
-	}
+User user = JSON.toObject(json,User.class);
 ```
-## 使用
-### 对象转JSON字符串
+## map转json
 ```
-String json = JsonParser.parseObject(user);
+Map<String,Object> map = new HashMap<>();
+map.put("name","JSON");
+map.put("age",25);
+String json = JSON.toJson(map);
 ```
-### List对象转JSON字符串
+## json转map
 ```
-String json = JsonParser.parseObject(list);
+Map<String,Object> map = JSON.toMap(json);
 ```
-### Json字符串转实体
+## list转json
 ```
-User user = JsonParser.parseJSONObject(User.class,json);
+List<User> list = new ArrayList<>();
+String json = JSON.toJson(list);
 ```
-### Json字符串转List实体
+## json转List<Map<String,Object>>
 ```
-List<User> user = JsonParser.parseJSONArray(User.class,json);
-List<String> user = JsonParser.parseJSONArray(String.class,json);
+List<Map<String,Object>> list = List<Map<>>();
+String json = JSON.toJson(list);
+```
+## List<Map<String,Object>>转json
+```
+Map<String,Object> map = JSON.toMap(json);
+```
+## json转list
+```
+List<User> list = JSON.toCollection(json,User.class);
+```
+## array转json
+```
+int[] array = new int[5];
+for(int i=0;i<5;i++){
+    array[i] = i;
+}
+String json = JSON.toJson(array);
+```
+## json转array
+```
+List<Integer> list = JSON.toCollection(json,Integer.class);
+int[] array = list.toArray(new int[list.size()]);
 ```
