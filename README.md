@@ -1,9 +1,9 @@
 # JSON
 Android Json工具
 ## JAR
-[JSON.jar](https://github.com/RelinRan/JsonParser/blob/master/JSON.jar)
+[JSON.jar](https://github.com/RelinRan/JSON/blob/master/JSON.jar)
 ## ARR
-[JSON.arr](https://github.com/RelinRan/JsonParser/blob/master/JSON.aar)
+[JSON.arr](https://github.com/RelinRan/JSON/blob/master/JSON.aar)
 
 ## JitPack implementation
 ### /build.grade
