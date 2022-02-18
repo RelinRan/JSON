@@ -18,7 +18,7 @@ allprojects {
 ### /app/build.grade
 ```
 dependencies {
-	 implementation 'com.github.RelinRan:JSON:2022.2.18.1'
+	 implementation 'com.github.RelinRan:JSON:2022.2.19.1'
 }
 ```
 ## object转json

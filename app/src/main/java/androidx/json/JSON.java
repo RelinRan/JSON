@@ -1,9 +1,10 @@
-package androidx.json;
+package androidx.ok.api;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -84,24 +85,24 @@ public class JSON {
     }
 
     /**
-     * @param cls   类
-     * @param field 字段名称
+     * @param clazz     类
+     * @param fieldName 字段名称
      * @return 是否是声明的字段
      */
-    public static boolean isDeclaredField(Class cls, String field) {
-        if (cls == null) {
+    public static boolean isDeclaredField(Class clazz, String fieldName) {
+        if (clazz == null) {
             return false;
         }
-        if (field == null || field.length() == 0) {
+        if (fieldName == null || fieldName.length() == 0) {
             return false;
         }
-        Field[] fields = cls.getDeclaredFields();
+        Field[] fields = findClassDeclaredFields(clazz);
         for (int i = 0; i < fields.length; i++) {
             String name = fields[i].getName();
             if (name == null) {
                 return false;
             }
-            if (field.equals(name)) {
+            if (fieldName.equals(name)) {
                 return true;
             }
         }
@@ -209,10 +210,38 @@ public class JSON {
                 value = value.contains(".") ? value : value + ".00";
                 field.set(bean, Float.parseFloat(value));
             }
+            //Boolean类型
+            if (fieldType == boolean.class || fieldType == Boolean.class) {
+                value = value.length() == 0 ? "false" : value;
+                boolean booleanValue = false;
+                if (value.equals("false") || value.equals("0")) {
+                    booleanValue = false;
+                }
+                if (value.equals("true") || value.equals("1")) {
+                    booleanValue = true;
+                }
+                field.set(bean, booleanValue);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @param clazz 类
+     * @param name  字段名称
+     * @return 本类及其父类寻找是否有此类
+     */
+    public static Field findClassField(Class clazz, String name) {
+        for (Field field : findClassDeclaredFields(clazz)) {
+            field.setAccessible(true);
+            if (field.getName().equals(name)) {
+                return field;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * @param object 对象
@@ -237,67 +266,79 @@ public class JSON {
             while (iterator.hasNext()) {
                 String key = iterator.next();
                 if (isDeclaredField(clazz, key)) {
-                    Field field = null;
-                    try {
-                        field = clazz.getDeclaredField(key);
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    }
-                    if (field != null) {
-                        field.setAccessible(true);
-                        Object value = object.get(key);
-                        String valueString = String.valueOf(value);
-                        valueString = isNone(valueString) ? "" : valueString;
-                        Class fieldType = field.getType();
-                        if (isPrimitive(fieldType)) {
-                            //Primitive
-                            setFieldValue(field, bean, valueString);
-                        } else {
-                            //Collection
-                            if (Collection.class.isAssignableFrom(fieldType)) {
-                                Type genericType = field.getGenericType();
-                                if (genericType instanceof ParameterizedType) {
-                                    ParameterizedType parameterizedType = (ParameterizedType) genericType;
-                                    Class argumentsClazz = (Class) parameterizedType.getActualTypeArguments()[0];
-                                    if (isPrimitive(argumentsClazz)) {
-                                        field.set(bean, toCollection(valueString, argumentsClazz));
-                                    } else {
-                                        field.set(bean, toCollection(field, argumentsClazz, valueString));
-                                    }
-                                }
-                            } else if (fieldType.isArray()) {
-                                //Array
-                                JSONArray jsonArray = (JSONArray) value;
-                                Class componentType = fieldType.getComponentType();
-                                field.set(bean, newArrayInstance(componentType, jsonArray));
-                            } else if (Map.class.isAssignableFrom(fieldType)) {
-                                //Map
-                                JSONObject jsonObject = (JSONObject) value;
-                                Map<String, Object> map = new HashMap<>();
-                                Iterator it = jsonObject.keys();
-                                while (it.hasNext()) {
-                                    String name = (String) it.next();
-                                    Object val = jsonObject.get(name);
-                                    map.put(name, val);
-                                }
-                                field.set(bean, map);
-                            } else {
-                                field.set(bean, toObject(valueString, fieldType));
-                            }
-                        }
-                    }
+                    setObjectValue(clazz, bean, object, key);
                 }
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
         return bean;
+    }
+
+    /**
+     * 设置对象值
+     *
+     * @param clazz     对象类
+     * @param clazzBean 对象实例化
+     * @param object    json对象
+     * @param fieldName 字段名称
+     * @param <T>       实体
+     */
+    public static <T> void setObjectValue(Class<T> clazz, T clazzBean, JSONObject object, String fieldName) {
+        try {
+            Field field = findClassField(clazz, fieldName);
+            if (field != null) {
+                field.setAccessible(true);
+                Object value = object.get(fieldName);
+                String valueString = String.valueOf(value);
+                valueString = isNone(valueString) ? "" : valueString;
+                Class fieldType = field.getType();
+                if (isPrimitive(fieldType)) {
+                    //Primitive
+                    setFieldValue(field, clazzBean, valueString);
+                } else {
+                    //Collection
+                    if (Collection.class.isAssignableFrom(fieldType)) {
+                        Type genericType = field.getGenericType();
+                        if (genericType instanceof ParameterizedType) {
+                            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+                            Class argumentsClazz = (Class) parameterizedType.getActualTypeArguments()[0];
+                            if (isPrimitive(argumentsClazz)) {
+                                field.set(clazzBean, toCollection(valueString, argumentsClazz));
+                            } else {
+                                field.set(clazzBean, toCollection(field, argumentsClazz, valueString));
+                            }
+                        }
+                    } else if (fieldType.isArray()) {
+                        //Array
+                        JSONArray jsonArray = (JSONArray) value;
+                        Class componentType = fieldType.getComponentType();
+                        field.set(clazzBean, newArrayInstance(componentType, jsonArray));
+                    } else if (Map.class.isAssignableFrom(fieldType)) {
+                        //Map
+                        JSONObject jsonObject = (JSONObject) value;
+                        Map<String, Object> map = new HashMap<>();
+                        Iterator it = jsonObject.keys();
+                        while (it.hasNext()) {
+                            String name = (String) it.next();
+                            Object val = jsonObject.get(name);
+                            map.put(name, val);
+                        }
+                        field.set(clazzBean, map);
+                    } else {
+                        field.set(clazzBean, toObject(valueString, fieldType));
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -527,6 +568,22 @@ public class JSON {
     }
 
     /**
+     * @param clazz 类
+     * @return 当前类及其父类类声明字段
+     */
+    public static Field[] findClassDeclaredFields(Class clazz) {
+        List<Field> fields = new ArrayList<>();
+        while (clazz != null) {
+            for (Field field : clazz.getDeclaredFields()) {
+                field.setAccessible(true);
+                fields.add(field);
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return fields.toArray(new Field[fields.size()]);
+    }
+
+    /**
      * @param obj 对象
      * @return json字符
      */
@@ -576,7 +633,7 @@ public class JSON {
         } else {
             //普通类
             JSONObject jsonObject = new JSONObject();
-            Field[] fields = obj.getClass().getDeclaredFields();
+            Field[] fields = findClassDeclaredFields(obj.getClass());
             if (fields.length == 0) {
                 return jsonObject.toString();
             }
