@@ -48,14 +48,14 @@ Map<String,Object> map = JSON.toMap(json);
 List<User> list = new ArrayList<>();
 String json = JSON.toJson(list);
 ```
-## json转List<Map<String,Object>>
+## json转map collection
 ```
 List<Map<String,Object>> list = List<Map<>>();
 String json = JSON.toJson(list);
 ```
-## List<Map<String,Object>>转json
+## map collection转json
 ```
-Map<String,Object> map = JSON.toMap(json);
+Map<String,Object> map = JSON.toMapCollection(json);
 ```
 ## json转list
 ```
