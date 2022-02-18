@@ -55,7 +55,7 @@ String json = JSON.toJson(list);
 ```
 ## map collection转json
 ```
-Map<String,Object> map = JSON.toMapCollection(json);
+List<Map<String,Object>> list = JSON.toMapCollection(json);
 ```
 ## json转list
 ```
