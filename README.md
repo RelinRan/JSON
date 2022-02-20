@@ -21,47 +21,52 @@ dependencies {
 	 implementation 'com.github.RelinRan:JSON:2022.2.19.1'
 }
 ```
-## object转json
+## Object
+对象转JSON字符串
 ```
 User user = new User();
 user.setName("JSON");
 user.setAge(25);
 String json = JSON.toJson(user);
 ```
-## json转object
+JSON字符串转对象
 ```
 User user = JSON.toObject(json,User.class);
 ```
-## map转json
+## Map
+Map转JSON字符串
 ```
 Map<String,Object> map = new HashMap<>();
 map.put("name","JSON");
 map.put("age",25);
 String json = JSON.toJson(map);
 ```
-## json转map
+JSON字符串转Map
 ```
 Map<String,Object> map = JSON.toMap(json);
 ```
-## list转json
+## List
+List转JSON字符串
 ```
 List<User> list = new ArrayList<>();
 String json = JSON.toJson(list);
 ```
-## json转map collection
+JSON字符串转List
 ```
 List<Map<String,Object>> list = List<Map<>>();
 String json = JSON.toJson(list);
 ```
-## map collection转json
+JSON转List<Map<String,Object>>
 ```
 List<Map<String,Object>> list = JSON.toMapCollection(json);
 ```
-## json转list
+List<Map<String,Object>>转JSON
 ```
 List<User> list = JSON.toCollection(json,User.class);
 ```
-## array转json
+
+## Array
+Array转JSON
 ```
 int[] array = new int[5];
 for(int i=0;i<5;i++){
@@ -69,7 +74,7 @@ for(int i=0;i<5;i++){
 }
 String json = JSON.toJson(array);
 ```
-## json转array
+JSON转Array
 ```
 List<Integer> list = JSON.toCollection(json,Integer.class);
 int[] array = list.toArray(new int[list.size()]);
