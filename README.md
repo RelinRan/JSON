@@ -16,7 +16,7 @@ allprojects {
 /app/build.grade
 ```
 dependencies {
-	 implementation 'com.github.RelinRan:JSON:2022.2.22.1'
+	 implementation 'com.github.RelinRan:JSON:2022.3.9.1'
 }
 ```
 ## Object
