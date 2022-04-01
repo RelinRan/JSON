@@ -527,9 +527,6 @@ public class JSON {
      * @return 是否预定义字段
      */
     public static boolean isPredefined(Field field) {
-        if (!field.isAccessible()) {
-            field.setAccessible(true);
-        }
         String name = field.getName();
         return name.equals("$change")
                 || name.equals("serialVersionUID")
@@ -649,19 +646,18 @@ public class JSON {
                 field.setAccessible(true);
                 Class<?> type = field.getType();
                 String name = field.getName();
-                if (isPredefined(field)) {
-                    continue;
-                }
-                try {
-                    //普通类型
-                    Object value = field.get(obj);
-                    if (isPrimitive(type)) {
-                        jsonObject.put(name, value);
-                    } else {
-                        addJSONObjectKeyValue(jsonObject, name, value);
+                if (!isPredefined(field)) {
+                    try {
+                        //普通类型
+                        Object value = field.get(obj);
+                        if (isPrimitive(type)) {
+                            jsonObject.put(name, value);
+                        } else {
+                            addJSONObjectKeyValue(jsonObject, name, value);
+                        }
+                    } catch (IllegalAccessException | JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (IllegalAccessException | JSONException e) {
-                    e.printStackTrace();
                 }
             }
             return jsonObject.toString();
