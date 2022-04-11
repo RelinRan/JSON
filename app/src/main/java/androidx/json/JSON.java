@@ -594,7 +594,7 @@ public class JSON {
      */
     public static String toJson(Object obj) {
         if (obj == null) {
-            return "";
+            return "{}";
         }
         if (Collection.class.isAssignableFrom(obj.getClass())) {
             //Collection
@@ -606,7 +606,7 @@ public class JSON {
             for (int i = 0; i < count; i++) {
                 Object item = list.get(i);
                 try {
-                    if (isPrimitive(item.getClass())) {
+                    if (isPrimitive(item.getClass())&&item!=null) {
                         primitiveArray.add(item);
                     } else {
                         jsonArray.put(new JSONObject(toJson(item)));
