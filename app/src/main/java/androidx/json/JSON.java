@@ -328,15 +328,15 @@ public class JSON {
                             map.put(name, val);
                         }
                         field.set(clazzBean, map);
-                    } else if (JSONArray.class.isAssignableFrom(fieldType)){
+                    } else if (JSONArray.class.isAssignableFrom(fieldType)) {
                         //JSONArray
                         field.set(clazzBean, toCollection(valueString, fieldType));
-                    }  else if (JSONObject.class.isAssignableFrom(fieldType)){
+                    } else if (JSONObject.class.isAssignableFrom(fieldType)) {
                         //JSONObject
                         field.set(clazzBean, toObject(valueString, fieldType));
-                    }else if (Object.class.isAssignableFrom(fieldType)){
+                    } else if (Object.class.isAssignableFrom(fieldType)) {
                         //Object
-                        field.set(clazzBean,toObject(valueString, fieldType));
+                        field.set(clazzBean, toObject(valueString, fieldType));
                     } else {
                         field.set(clazzBean, toObject(valueString, fieldType));
                     }
@@ -509,6 +509,9 @@ public class JSON {
      * @return 是否基础变量
      */
     public static boolean isPrimitive(Class<?> type) {
+        if (type == null) {
+            return false;
+        }
         return type.isPrimitive()
                 || type.isAssignableFrom(String.class)
                 || type.isAssignableFrom(Boolean.class)
@@ -606,7 +609,7 @@ public class JSON {
             for (int i = 0; i < count; i++) {
                 Object item = list.get(i);
                 try {
-                    if (isPrimitive(item.getClass())&&item!=null) {
+                    if (item != null && isPrimitive(item.getClass())) {
                         primitiveArray.add(item);
                     } else {
                         jsonArray.put(new JSONObject(toJson(item)));
