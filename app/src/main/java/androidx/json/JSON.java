@@ -534,6 +534,7 @@ public class JSON {
                 || type.isAssignableFrom(Void.class);
     }
 
+
     /**
      * @param field 字段
      * @return 是否预定义字段

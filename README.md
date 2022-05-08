@@ -1,8 +1,7 @@
 # JSON
 Android Json工具
 ## ARR
-[JSON.arr](https://github.com/RelinRan/JSON/blob/master/JSON.aar)
-
+[json_2022.5.8.1.aar](https://github.com/RelinRan/JSON/blob/master/json_2022.5.8.1.aar)
 ## JitPack
 /build.grade
 ```
@@ -16,7 +15,7 @@ allprojects {
 /app/build.grade
 ```
 dependencies {
-	 implementation 'com.github.RelinRan:JSON:2022.4.2.1'
+	 implementation 'com.github.RelinRan:JSON:2022.5.8.1'
 }
 ```
 ## Object
