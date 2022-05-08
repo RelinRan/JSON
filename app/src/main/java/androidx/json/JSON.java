@@ -1,4 +1,6 @@
-package androidx.json;
+package androidx.ok.api;
+
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -515,13 +517,20 @@ public class JSON {
         return type.isPrimitive()
                 || type.isAssignableFrom(String.class)
                 || type.isAssignableFrom(Boolean.class)
+                || type.isAssignableFrom(boolean.class)
                 || type.isAssignableFrom(Character.class)
                 || type.isAssignableFrom(Byte.class)
+                || type.isAssignableFrom(byte.class)
                 || type.isAssignableFrom(Short.class)
+                || type.isAssignableFrom(short.class)
                 || type.isAssignableFrom(Integer.class)
+                || type.isAssignableFrom(int.class)
                 || type.isAssignableFrom(Long.class)
+                || type.isAssignableFrom(long.class)
                 || type.isAssignableFrom(Float.class)
+                || type.isAssignableFrom(float.class)
                 || type.isAssignableFrom(Double.class)
+                || type.isAssignableFrom(double.class)
                 || type.isAssignableFrom(Void.class);
     }
 
@@ -531,6 +540,11 @@ public class JSON {
      */
     public static boolean isPredefined(Field field) {
         String name = field.getName();
+        for (Field f : Object.class.getDeclaredFields()) {
+            if (name.equals(f.getName())){
+                return true;
+            }
+        }
         return name.equals("$change")
                 || name.equals("serialVersionUID")
                 || name.equals("NULL")
@@ -587,6 +601,8 @@ public class JSON {
                 fields.add(field);
             }
             clazz = clazz.getSuperclass();
+            if (clazz != null) {
+            }
         }
         return fields.toArray(new Field[fields.size()]);
     }
@@ -609,7 +625,7 @@ public class JSON {
             for (int i = 0; i < count; i++) {
                 Object item = list.get(i);
                 try {
-                    if (item != null && isPrimitive(item.getClass())) {
+                    if (isPrimitive(item == null ? null : item.getClass())) {
                         primitiveArray.add(item);
                     } else {
                         jsonArray.put(new JSONObject(toJson(item)));
@@ -649,7 +665,7 @@ public class JSON {
                 field.setAccessible(true);
                 Class<?> type = field.getType();
                 String name = field.getName();
-                if (!isPredefined(field)) {
+                if (!isPredefined(field) && type != null) {
                     try {
                         //普通类型
                         Object value = field.get(obj);
