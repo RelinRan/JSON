@@ -1,7 +1,9 @@
 # JSON
 Android Json工具
 ## ARR
-[json_2022.5.8.1.aar](https://github.com/RelinRan/JSON/blob/master/json_2022.5.8.1.aar)
+如果是java项目使用，请先下载org.json.jar依赖在使用JSON 
+[json_2023.8.23.1.aar](https://github.com/RelinRan/JSON/blob/master/json_2023.8.23.1.aar)  
+[org.json.jar](https://github.com/RelinRan/JSON/blob/master/org.json.aar)  
 ## JitPack
 /build.grade
 ```
@@ -15,7 +17,7 @@ allprojects {
 /app/build.grade
 ```
 dependencies {
-	 implementation 'com.github.RelinRan:JSON:2022.5.8.1'
+	 implementation 'com.github.RelinRan:JSON:2023.8.23.1'
 }
 ```
 ## Object
@@ -25,6 +27,18 @@ User user = new User();
 user.setName("JSON");
 user.setAge(25);
 String json = JSON.toJson(user);
+```
+对象转JSON字符串(对象中含有泛型占位)
+```
+User user = new User();
+user.setName("JSON");
+user.setAge(25);
+//设置泛型字段名和对应泛型类型
+Map<String,Class<?>> variable = new HashMap<>();
+variable.put("data",Data.class);
+variable.put("auth",String.class);
+//转JSON字符串
+String json = JSON.toJson(user,variable);
 ```
 JSON字符串转对象
 ```
