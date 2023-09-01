@@ -6,8 +6,8 @@ Android Json工具
 |-|-|
 |Github-JSON|[查看](https://github.com/RelinRan/JSON) |
 |Gitee-JSON|[查看](https://gitee.com/relin/JSON) |
-|json_2023.9.1.1.aar|[下载](https://github.com/RelinRan/JSON/blob/master/json_2023.9.1.1.aar) |
-|org.json.jar|[下载](https://github.com/RelinRan/JSON/blob/master/org.json.aar) |
+|json.jar|[下载](https://github.com/RelinRan/JSON/blob/master/jar) |
+|org.json.jar|[下载](https://github.com/RelinRan/JSON/blob/master/jar) |
 ## JitPack
 /build.grade
 ```
@@ -21,7 +21,7 @@ allprojects {
 /app/build.grade
 ```
 dependencies {
-	 implementation 'com.github.RelinRan:JSON:2023.9.1.1'
+	 implementation 'com.github.RelinRan:JSON:2023.9.1.2'
 }
 ```
 #### Debug
