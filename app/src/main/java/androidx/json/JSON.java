@@ -179,6 +179,18 @@ public class JSON {
     }
 
     /**
+     * @param json  字符串
+     * @param clazz 类型
+     * @return 字符转Enum对象
+     */
+    public <T> Enum toEnum(String json, Class clazz) {
+        if (isNone(json)) {
+            return null;
+        }
+        return Enum.valueOf(clazz,toJSONObject(json).optString("name"));
+    }
+
+    /**
      * @param clazz     类
      * @param fieldName 字段名称
      * @return 是否是声明的字段
@@ -521,6 +533,9 @@ public class JSON {
         }
         if (Map.class.isAssignableFrom(clazz)) {
             return (T) toMap(object.toString(), clazz);
+        }
+        if (Enum.class.isAssignableFrom(clazz)) {
+            return (T) toEnum(object.toString(), clazz);
         }
         //获取到所有访问权限的构造函数（包括private的构造函数）
         bean = toBean(clazz);
