@@ -21,7 +21,7 @@ allprojects {
 /app/build.grade
 ```
 dependencies {
-	 implementation 'com.github.RelinRan:JSON:2023.9.1.2'
+	 implementation 'com.github.RelinRan:JSON:2023.11.24.1'
 }
 ```
 #### Debug
